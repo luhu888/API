@@ -1,0 +1,8 @@
+import httplib
+url = "http://192.168.1.111:9999"
+conn = httplib.HTTPConnection("192.168.1.111", 9999)
+conn.request(method="GET",url=url)
+response = conn.getresponse()
+res= response.read()
+print res
+print response.status
