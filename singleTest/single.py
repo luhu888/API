@@ -4,7 +4,7 @@ import requests
 import xlrd
 
 
-data = xlrd.open_workbook('D:\JetBrains\PythonProject\APITest\API_source\API.xlsx')
+data = xlrd.open_workbook('\API_source\API.xlsx')
 table = data.sheets()[0]  # 该表的第1个页签
 nrows = table.nrows  # 获取表的行数
 # print nrows
