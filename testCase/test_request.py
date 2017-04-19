@@ -47,7 +47,7 @@ class test_userAPI(MyTest):    # 将单个接口封装成一个类，其中的�
                 self.r = requests.delete(url=self.url, headers=eval(headers))
 
             print url
-            print '响应码：：：' + str(self.r.status_code)
+            print '响应码::::::' + str(self.r.status_code)
             print self.r.text
             print '#####################################################################################'
 
