@@ -33,18 +33,18 @@ class test_userAPI(MyTest):    # 将单个接口封装成一个类，其中的�
             self.url = url
             if data:
                 self.data = eval(data)
-            self.headers = eval(headers)
+
             if method == 'post':
-                if not headers:
+                if headers == "":
                     self.r = requests.post(url=self.url, json=self.data)
                 else:
-                    self.r = requests.post(url=self.url, json=self.data, headers=self.headers)
+                    self.r = requests.post(url=self.url, json=self.data, headers=eval(headers))
             elif method == 'get':
-                self.r = requests.get(url=self.url, headers=self.headers)
+                self.r = requests.get(url=self.url, headers=eval(headers))
             elif method == 'put':
-                self.r = requests.put(url=self.url, json=self.data, headers=self.headers)
+                self.r = requests.put(url=self.url, json=self.data, headers=eval(headers))
             elif method == 'delete':
-                self.r = requests.delete(url=self.url, headers=self.headers)
+                self.r = requests.delete(url=self.url, headers=eval(headers))
 
             print url
             print '响应码：：：' + str(self.r.status_code)
