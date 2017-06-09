@@ -2,7 +2,7 @@
 # -*- coding: utf_8 -*-
 import unittest
 import requests
-
+import ast
 
 import xlrd
 
@@ -24,7 +24,7 @@ class test_userAPI(MyTest):    # 将单个接口封装成一个类，其中的�
         table = data.sheets()[0]   # 该表的第1个页签
         nrows = table.nrows   # 获取表的行数
         # print nrows
-        for i in range(31, 33):
+        for i in range(130, 131):
             # print table.cell_value(0, 0)   # 第1行，第一列
             method = table.cell_value(i, 3)
             url = table.cell_value(i, 0)
@@ -32,17 +32,17 @@ class test_userAPI(MyTest):    # 将单个接口封装成一个类，其中的�
             headers = table.cell_value(i, 1)
             self.url = url
             if data:
-                self.data = eval(data)
+                self.data = ast.literal_eval(data)
 
             if method == 'post':
                 if headers == '':
                     self.r = requests.post(url=self.url, json=self.data)
                 else:
-                    self.r = requests.post(url=self.url, json=self.data, headers=eval(headers))
+                    self.r = requests.post(url=self.url, json=self.data, headers=ast.literal_eval(headers))
             elif method == 'get':
-                self.r = requests.get(url=self.url, headers=eval(headers))
+                self.r = requests.get(url=self.url, headers=ast.literal_eval(headers))
             elif method == 'put':
-                self.r = requests.put(url=self.url, json=self.data, headers=eval(headers))
+                self.r = requests.put(url=self.url, json=self.data, headers=ast.literal_eval(headers))
             elif method == 'delete':
                 self.r = requests.delete(url=self.url, headers=eval(headers))
 
