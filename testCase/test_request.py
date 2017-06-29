@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf_8 -*-
 import unittest
+from time import sleep
+
 import requests
 import ast
 import xlrd
@@ -61,4 +63,5 @@ class test_userAPI(MyTest):    # 将单个接口封装成一个类，其中的�
             print url+'     响应码:'.decode('utf-8') + str(self.r.status_code)+''
             print self.r.content
             print '#####################################################################################'
+            sleep(0.1)
 
