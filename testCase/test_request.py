@@ -18,7 +18,7 @@ class MyTest(unittest.TestCase):  # 封装测试环境的初始化和还原的�
         pass
 
 
-class test_userAPI(MyTest):    # 将单个接口封装成一个类，其中的方法是具体的测试用例
+class TestUserAPI(MyTest):    # 将单个接口封装成一个类，其中的方法是具体的测试用例
 
     def test_userAPI(self):     # self.用在方法属性中，表示该方法的属性，不会影响其他方法的属性
         data = xlrd.open_workbook('D:\JetBrains\PythonProject\APITest\API_source\API.xlsx')
