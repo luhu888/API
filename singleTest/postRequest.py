@@ -9,5 +9,6 @@ json2 = [{'user': {'name': '1ykh', 'tel': '15856121999'}, 'follower': 'root', 'c
           'category': '准学员所属分类1', 'intent_grade': '不想去', 'remark': '批量添加的', 'tags': '标记',
           'next_follow_time': '2017-05-12 00:00:00'}, ]
 r = requests.post(url=url, headers=headers, json=json2)
-print r.status_code
+print
+r.status_code
 print r.text

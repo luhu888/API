@@ -5,8 +5,8 @@ from datetime import timedelta
 import random
 import string
 
-with open('templib/districtcode') as text:  # 单独运行该文件时，需将路径前的templib/删除
-        data = text.read()
+with open('districtcode', encoding='utf-8') as text:  # 单独运行该文件时，需将路径前的templib/删除
+    data = text.read()
 global codelist
 codelist = []
 districtlist = data.split('\n')
@@ -126,5 +126,5 @@ first_names = ['的', '一', '是', '了', '我', '不', '人', '在', '他', '�
                    '奶', '雄', '升', '碃', '编', '典', '袋', '莱', '含', '盛', '济', '蒙', '棋', '端', '腿', '招', '释', '介', '烧', '误',
                    '乾', '坤']
 if __name__ == "__main__":
-    print full_name()
-    print gennerator()
+    print('姓名：'+full_name())
+    print('身份证号：'+gennerator())
