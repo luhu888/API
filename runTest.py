@@ -2,21 +2,18 @@
 # -*- coding: utf_8 -*-
 import unittest
 import time
-import sys
 
 from templib.HTMLTestRunner import HTMLTestRunner
 from testCase import test_request
 
 '''集体运行选中的测试用例'''
-reload(sys)
-sys.setdefaultencoding('utf-8')
 suite = unittest.TestSuite()  # 实例化测试集
 
 suite.addTest(test_request.TestUserAPI('test_userAPI'))  # 增加测试用例
 
 if __name__ == '__main__':
-    testunit = unittest.TestSuite()
-    testunit.addTest(suite)
+    test_unit = unittest.TestSuite()
+    test_unit.addTest(suite)
     now = time.strftime('%Y-%m-%d %H-%M-%S')    # 获取当前的时间，并固定其格式
     filename = './report/' + now + 'test_result.html'    # 定义报告的存放位置
     fp = open(filename, 'wb')   # wb表示有读写权限

@@ -1,14 +1,13 @@
 # __author__=luhu
 # -*- coding: utf-8 -*-
+import json
+
 import requests
 
-url = 'http://192.168.1.102:9999/pre_student/bulk_create/'
-headers = {"Authorization": "Token b0a872460239b0fd8dab1b6c93718a7f39a9536a"}
-# json = {"ids": [1, 3, 5], "data": "{'follower': 2, 'source': 2, 'intent_grade': 1, 'category': 1, 'next_follow_time': '2017-06-22T12:12'}"}
-json2 = [{'user': {'name': '1ykh', 'tel': '15856121999'}, 'follower': 'root', 'courses': '语文课', 'source': '准学员来源1',
-          'category': '准学员所属分类1', 'intent_grade': '不想去', 'remark': '批量添加的', 'tags': '标记',
-          'next_follow_time': '2017-05-12 00:00:00'}, ]
-r = requests.post(url=url, headers=headers, json=json2)
-print
-r.status_code
-print r.text
+url = 'http://test2.xinheyun.com/api/v2/products?filters=%5B%5D&length=10&search_map=%5B%5D&start=0&type=products'
+cookie = {'_ga': 'GA1.2.580916110.1530770314', '_gid': 'GA1.2.1580582036.1530770314', '__lnkrntdmcvrd': '-1', 'AUTHOR': 'ZORIGT', 'STAFF_ID': '3893', 'TENANT_ID': 'dceb93ab-3f89-45e5-9aad-1953b484816d', 'SESSION': 'c666b719-44a0-43f6-b9d7-3518a7cb2af8', '_gat': '1', 'TOKEN': '5F018FB31F897FDEA3AD47C6F08E1180'}
+r = requests.post(url=url, cookies=cookie)
+print(r.status_code)
+data = json.loads(r.text)
+response = json.dumps(data, sort_keys=True, indent=4, ensure_ascii=False)
+print(response)

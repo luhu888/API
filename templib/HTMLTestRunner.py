@@ -91,7 +91,7 @@ Version in 0.7.1
 # TODO: simplify javascript using ,ore than 1 class in the class attribute?
 
 import datetime
-import StringIO
+import io
 import sys
 import time
 import unittest
@@ -123,13 +123,13 @@ class OutputRedirector(object):
     def flush(self):
         self.fp.flush()
 
+
 stdout_redirector = OutputRedirector(sys.stdout)
 stderr_redirector = OutputRedirector(sys.stderr)
 
 
 # ----------------------------------------------------------------------
 # Template
-
 
 class Template_mixin(object):
     """
@@ -297,6 +297,7 @@ function showOutput(id, name) {
 """
     # variables: (title, generator, stylesheet, heading, report, ending)
 
+
     # ------------------------------------------------------------------------
     # Stylesheet
     #
@@ -348,7 +349,7 @@ a.popup_link:hover {
     font-family: "Lucida Console", "Courier New", Courier, monospace;
     text-align: left;
     font-size: 8pt;
-    width: 900px;
+    width: 500px;
 }
 
 }
@@ -389,6 +390,8 @@ a.popup_link:hover {
 </style>
 """
 
+
+
     # ------------------------------------------------------------------------
     # Heading
     #
@@ -399,10 +402,12 @@ a.popup_link:hover {
 <p class='description'>%(description)s</p>
 </div>
 
-"""  # variables: (title, parameters, description)
+""" # variables: (title, parameters, description)
 
     HEADING_ATTRIBUTE_TMPL = """<p class='attribute'><strong>%(name)s:</strong> %(value)s</p>
-"""  # variables: (name, value)
+""" # variables: (name, value)
+
+
 
     # ------------------------------------------------------------------------
     # Report
@@ -452,7 +457,8 @@ a.popup_link:hover {
     <td>%(error)s</td>
     <td><a href="javascript:showClassDetail('%(cid)s',%(count)s)">Detail</a></td>
 </tr>
-"""  # variables: (style, desc, count, Pass, fail, error, cid)
+""" # variables: (style, desc, count, Pass, fail, error, cid)
+
 
     REPORT_TEST_WITH_OUTPUT_TMPL = r"""
 <tr id='%(tid)s' class='%(Class)s'>
@@ -476,18 +482,22 @@ a.popup_link:hover {
 
     </td>
 </tr>
-"""  # variables: (tid, Class, style, desc, status)
+""" # variables: (tid, Class, style, desc, status)
+
 
     REPORT_TEST_NO_OUTPUT_TMPL = r"""
 <tr id='%(tid)s' class='%(Class)s'>
     <td class='%(style)s'><div class='testcase'>%(desc)s</div></td>
     <td colspan='5' align='center'>%(status)s</td>
 </tr>
-"""  # variables: (tid, Class, style, desc, status)
+""" # variables: (tid, Class, style, desc, status)
+
 
     REPORT_TEST_OUTPUT_TMPL = r"""
 %(id)s: %(output)s
-"""  # variables: (id, output)
+""" # variables: (id, output)
+
+
 
     # ------------------------------------------------------------------------
     # ENDING
@@ -526,7 +536,7 @@ class _TestResult(TestResult):
     def startTest(self, test):
         TestResult.startTest(self, test)
         # just one buffer for both stdout and stderr
-        self.outputBuffer = StringIO.StringIO()
+        self.outputBuffer = io.StringIO()
         stdout_redirector.fp = self.outputBuffer
         stderr_redirector.fp = self.outputBuffer
         self.stdout0 = sys.stdout
@@ -614,7 +624,8 @@ class HTMLTestRunner(Template_mixin):
         test(result)
         self.stopTime = datetime.datetime.now()
         self.generateReport(test, result)
-        print >>sys.stderr, '\nTime Elapsed: %s' % (self.stopTime-self.startTime)
+        # print >> sys.stderr, '\nTime Elapsed: %s' % (self.stopTime-self.startTime)
+        print(sys.stderr, '\nTime Elapsed: %s' % (self.stopTime-self.startTime))
         return result
 
     def sortResult(self, result_list):
@@ -624,7 +635,7 @@ class HTMLTestRunner(Template_mixin):
         classes = []
         for n,t,o,e in result_list:
             cls = t.__class__
-            if not rmap.has_key(cls):
+            if not cls in rmap:
                 rmap[cls] = []
                 classes.append(cls)
             rmap[cls].append((n,t,o,e))
@@ -639,9 +650,9 @@ class HTMLTestRunner(Template_mixin):
         startTime = str(self.startTime)[:19]
         duration = str(self.stopTime - self.startTime)
         status = []
-        if result.success_count: status.append('Pass %s' % result.success_count)
+        if result.success_count: status.append('Pass %s'    % result.success_count)
         if result.failure_count: status.append('Failure %s' % result.failure_count)
-        if result.error_count: status.append('Error %s' % result.error_count)
+        if result.error_count:   status.append('Error %s'   % result.error_count  )
         if status:
             status = ' '.join(status)
         else:
@@ -660,14 +671,14 @@ class HTMLTestRunner(Template_mixin):
         report = self._generate_report(result)
         ending = self._generate_ending()
         output = self.HTML_TMPL % dict(
-            title=saxutils.escape(self.title),
-            generator=generator,
-            stylesheet=stylesheet,
-            heading=heading,
-            report=report,
-            ending=ending,
+            title = saxutils.escape(self.title),
+            generator = generator,
+            stylesheet = stylesheet,
+            heading = heading,
+            report = report,
+            ending = ending,
         )
-        self.stream.write(output.encode('utf-8'))
+        self.stream.write(output.encode('utf8'))
 
     def _generate_stylesheet(self):
         return self.STYLESHEET_TMPL
@@ -676,14 +687,14 @@ class HTMLTestRunner(Template_mixin):
         a_lines = []
         for name, value in report_attrs:
             line = self.HEADING_ATTRIBUTE_TMPL % dict(
-                    name=saxutils.escape(name),
-                    value=saxutils.escape(value),
+                    name = saxutils.escape(name),
+                    value = saxutils.escape(value),
                 )
             a_lines.append(line)
         heading = self.HEADING_TMPL % dict(
-            title=saxutils.escape(self.title),
-            parameters=''.join(a_lines),
-            description=saxutils.escape(self.description),
+            title = saxutils.escape(self.title),
+            parameters = ''.join(a_lines),
+            description = saxutils.escape(self.description),
         )
         return heading
 
@@ -693,7 +704,7 @@ class HTMLTestRunner(Template_mixin):
         for cid, (cls, cls_results) in enumerate(sortedResult):
             # subtotal for a class
             np = nf = ne = 0
-            for n, t, o, e in cls_results:
+            for n,t,o,e in cls_results:
                 if n == 0: np += 1
                 elif n == 1: nf += 1
                 else: ne += 1
@@ -707,25 +718,25 @@ class HTMLTestRunner(Template_mixin):
             desc = doc and '%s: %s' % (name, doc) or name
 
             row = self.REPORT_CLASS_TMPL % dict(
-                style=ne > 0 and 'errorClass' or nf > 0 and 'failClass' or 'passClass',
-                desc=desc,
-                count=np+nf+ne,
-                Pass=np,
-                fail=nf,
-                error=ne,
-                cid='c%s' % (cid+1),
+                style = ne > 0 and 'errorClass' or nf > 0 and 'failClass' or 'passClass',
+                desc = desc,
+                count = np+nf+ne,
+                Pass = np,
+                fail = nf,
+                error = ne,
+                cid = 'c%s' % (cid+1),
             )
             rows.append(row)
 
-            for tid, (n, t, o, e) in enumerate(cls_results):
+            for tid, (n,t,o,e) in enumerate(cls_results):
                 self._generate_report_test(rows, cid, tid, n, t, o, e)
 
         report = self.REPORT_TMPL % dict(
-            test_list=''.join(rows),
-            count=str(result.success_count+result.failure_count+result.error_count),
-            Pass=str(result.success_count),
-            fail=str(result.failure_count),
-            error=str(result.error_count),
+            test_list = ''.join(rows),
+            count = str(result.success_count+result.failure_count+result.error_count),
+            Pass = str(result.success_count),
+            fail = str(result.failure_count),
+            error = str(result.error_count),
         )
         return report
 
@@ -739,27 +750,29 @@ class HTMLTestRunner(Template_mixin):
         tmpl = has_output and self.REPORT_TEST_WITH_OUTPUT_TMPL or self.REPORT_TEST_NO_OUTPUT_TMPL
 
         # o and e should be byte string because they are collected from stdout and stderr?
-        if isinstance(o, str):
+        if isinstance(o,str):
             # TODO: some problem with 'string_escape': it escape \n and mess up formating
             # uo = unicode(o.encode('string_escape'))
-            uo = o.decode('utf-8')
+            # uo = o.decode('latin-1')
+            uo = e
         else:
             uo = o
-        if isinstance(e, str):
+        if isinstance(e,str):
             # TODO: some problem with 'string_escape': it escape \n and mess up formating
             # ue = unicode(e.encode('string_escape'))
-            ue = e.decode('utf-8')
+            # ue = e.decode('latin-1')
+            ue = e
         else:
             ue = e
 
         script = self.REPORT_TEST_OUTPUT_TMPL % dict(
-            id=tid,
-            output=saxutils.escape(uo+ue),
+            id = tid,
+            output = saxutils.escape(str(uo)+ue),
         )
 
         row = tmpl % dict(
-            tid=tid,
-            Class=(n == 0 and 'hiddenRow' or 'none'),
+            tid = tid,
+            Class = (n == 0 and 'hiddenRow' or 'none'),
             style = n == 2 and 'errorCase' or (n == 1 and 'failCase' or 'none'),
             desc = desc,
             script = script,
@@ -792,6 +805,7 @@ class TestProgram(unittest.TestProgram):
         if self.testRunner is None:
             self.testRunner = HTMLTestRunner(verbosity=self.verbosity)
         unittest.TestProgram.runTests(self)
+
 
 main = TestProgram
 

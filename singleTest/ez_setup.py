@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # __author__=luhu
-#!/usr/bin/env python
 
 """
 Setuptools bootstrapping installer.

@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf_8 -*-
+import json
+
 import requests
 import xlrd
 
 
-data = xlrd.open_workbook('D:\JetBrains\PythonProject\APITest\API_source\API.xlsx', 'utf-8')
+data = xlrd.open_workbook('D:\pythonProject\SchoolMS_API_Test\API_source\API.xlsx', 'utf-8')
 table = data.sheets()[0]  # 该表的第1个页签
 nrows = table.nrows  # 获取表的行数
 # print nrows
@@ -39,5 +41,7 @@ elif method == 'delete':
     headers = eval(headers)
     r = requests.delete(url=url, headers=headers)
 
-print str(url)+'    响应码：' + str(r.status_code)
-print r.text
+print(str(url)+'    响应码：' + str(r.status_code))
+data = json.loads(r.text)
+response = json.dumps(data, sort_keys=True, indent=4, ensure_ascii=False)
+print(response)
