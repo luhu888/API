@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf_8 -*-
+import json
 import unittest
 from time import sleep
 
@@ -62,9 +63,10 @@ class TestUserAPI(MyTest):    # 将单个接口封装成一个类，其中的方
             elif method == 'patch':
                 self.r = requests.patch(url=self.url, json=self.data, headers=ast.literal_eval(headers))
 
-            print(url+'     响应码:'.decode('utf-8') + str(self.r.status_code)+'')
+            print(url+'     响应码:' + str(self.r.status_code)+'')
+            # data = json.loads(self.r.content)
+            # response = json.dumps(data, sort_keys=True, indent=4, ensure_ascii=False)
+            # print(response)
             print(self.r.content)
-            print('#####################################################################################')
-            sleep(0.1)
-            print('睡一毫秒')
+            print('--------------------------------------------------------------------------------')
 
